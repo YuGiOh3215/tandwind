@@ -10,6 +10,7 @@ tempC = 0
 item = False
 serial.redirect_to_usb()
 weatherbit.start_wind_monitoring()
+weatherbit.start_weather_monitoring()
 item = True
 """
 
@@ -32,7 +33,10 @@ def on_forever():
 #        basic.show_string(current_WindDirection_List)
 
     # -------- temperature --------
-    tempC = Math.idiv(weatherbit.soil_temperature(), 100)
+    StempC = Math.idiv(weatherbit.soil_temperature(), 100)
+    tempC = Math.idiv(weatherbit.temperature(), 100)
+    humid = Math.idiv(weatherbit.humidity(), 1024)
+    pressure = Math.idiv(weatherbit.pressure(), 25600)
 #    if item:
 #        basic.show_string("Ground Temp: ")
 #        basic.show_number(tempC)
@@ -42,7 +46,7 @@ def on_forever():
 #        else:
 #            basic.show_string("Plant")
 
-    serial.write_line("" + str(Math.round(current_WindSpeed)) + "," + current_WindDirection_List + "," +tempC)
+    serial.write_line("" + str(Math.round(current_WindSpeed)) + "," + current_WindDirection_List + "," + StempC+"," + tempC+"," + humid+"," + pressure)
     basic.pause(1 * 3000)
     
 basic.forever(on_forever)

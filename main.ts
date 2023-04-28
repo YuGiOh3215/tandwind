@@ -8,6 +8,7 @@ let tempC = 0
 let item = false
 serial.redirectToUSB()
 weatherbit.startWindMonitoring()
+weatherbit.startWeatherMonitoring()
 item = true
 /** Note: If "???" is displayed, direction is unknown! */
 basic.forever(function on_forever() {
@@ -23,7 +24,10 @@ basic.forever(function on_forever() {
     //         basic.show_string("Dir")
     //         basic.show_string(current_WindDirection_List)
     //  -------- temperature --------
-    tempC = Math.idiv(weatherbit.soilTemperature(), 100)
+    let StempC = Math.idiv(weatherbit.soilTemperature(), 100)
+    tempC = Math.idiv(weatherbit.temperature(), 100)
+    let humid = Math.idiv(weatherbit.humidity(), 1024)
+    let pressure = Math.idiv(weatherbit.pressure(), 25600)
     //     if item:
     //         basic.show_string("Ground Temp: ")
     //         basic.show_number(tempC)
@@ -32,6 +36,6 @@ basic.forever(function on_forever() {
     //             basic.show_string("Don't Plant!")
     //         else:
     //             basic.show_string("Plant")
-    serial.writeLine("" + ("" + Math.round(current_WindSpeed)) + "," + current_WindDirection_List + "," + tempC)
+    serial.writeLine("" + ("" + Math.round(current_WindSpeed)) + "," + current_WindDirection_List + "," + StempC + "," + tempC + "," + humid + "," + pressure)
     basic.pause(1 * 3000)
 })
