@@ -6,7 +6,8 @@ let current_WindDirection_List = ""
 let current_WindSpeed = 0
 let tempC = 0
 let item = false
-serial.redirectToUSB()
+// serial.redirect_to_usb()
+serial.redirect(SerialPin.P15, SerialPin.P14, BaudRate.BaudRate9600)
 weatherbit.startWindMonitoring()
 weatherbit.startWeatherMonitoring()
 item = true

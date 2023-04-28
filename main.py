@@ -8,7 +8,8 @@ current_WindDirection_List = ""
 current_WindSpeed = 0
 tempC = 0
 item = False
-serial.redirect_to_usb()
+#serial.redirect_to_usb()
+serial.redirect(SerialPin.P15, SerialPin.P14, BaudRate.BAUD_RATE9600)
 weatherbit.start_wind_monitoring()
 weatherbit.start_weather_monitoring()
 item = True
