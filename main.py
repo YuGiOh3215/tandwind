@@ -1,15 +1,26 @@
+import weatherbit 
+#from math import *
+from serial import * 
+
+from tkinter import *
+#from threaded import *
+from time import *
+#from logging import *
+
+
 
 def on_button_pressed_a():
     global item
     item = not (item)
-input.on_button_pressed(Button.A, on_button_pressed_a)
+#input.on_button_pressed(Button.A, on_button_pressed_a)
 
 current_WindDirection_List = ""
 current_WindSpeed = 0
 tempC = 0
 item = False
+log.set_labels('wind', 'dir', 'STemp', 'Temp', 'humidity', 'pressure')
 #serial.redirect_to_usb()
-serial.redirect(SerialPin.P15, SerialPin.P14, BaudRate.BAUD_RATE9600)
+#Serial.redirect(SerialPin.P15, SerialPin.P14, BaudRate.BAUD_RATE9600)
 weatherbit.start_wind_monitoring()
 weatherbit.start_weather_monitoring()
 item = True
@@ -26,28 +37,23 @@ def on_forever():
     # -------- wind --------
     current_WindSpeed = weatherbit.wind_speed() * 3600 / 1000
     current_WindDirection_List = weatherbit.wind_direction()
-#    if item:
-#        basic.show_string("Sp")
-#        basic.show_number(Math.round(current_WindSpeed))
-#    else:
-#        basic.show_string("Dir")
-#        basic.show_string(current_WindDirection_List)
 
     # -------- temperature --------
-    StempC = Math.idiv(weatherbit.soil_temperature(), 100)
-    tempC = Math.idiv(weatherbit.temperature(), 100)
-    humid = Math.idiv(weatherbit.humidity(), 1024)
-    pressure = Math.idiv(weatherbit.pressure(), 25600)
-#    if item:
-#        basic.show_string("Ground Temp: ")
-#        basic.show_number(tempC)
-#    else:
-#        if tempC < 12:
-#            basic.show_string("Don't Plant!")
-#        else:
-#            basic.show_string("Plant")
+    StempC = (weatherbit.soil_temperature() / 100)
+    tempC = (weatherbit.temperature()/ 100)
+    # -------- humidity --------
 
-    serial.write_line("" + str(Math.round(current_WindSpeed)) + "," + current_WindDirection_List + "," + StempC+"," + tempC+"," + humid+"," + pressure)
-    basic.pause(1 * 3000)
+    humid = (weatherbit.humidity()/ 1024)
+    # -------- pressure --------
+    pressure = (weatherbit.pressure()/ 25600)
+
+  
+    log.add({'ws': current_WindSpeed, 'wd': current_WindDirection_List,
+             'stc': StempC, 'tc': tempC, 'hmd' : humid, 'prs' : pressure})
+#    Serial.write_line("" + str(Math.round(current_WindSpeed)) + "," + current_WindDirection_List + "," + StempC+"," + tempC+"," + humid+"," + pressure)
+
     
-basic.forever(on_forever)
+    time.sleep(3000)
+    
+while True:
+    on_forever()
