@@ -5,7 +5,7 @@ from serial import *
 from tkinter import *
 #from threaded import *
 from time import *
-#from logging import *
+from logging import *
 
 
 
